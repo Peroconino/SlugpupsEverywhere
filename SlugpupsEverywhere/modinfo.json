@@ -1,0 +1,20 @@
+{
+  "id": "Peroconino.SlugpupsEverywhere",
+  "name": "Pups Everywhere",
+  "version": "1.0.0",
+  "authors": "Peroconino",
+  "description": "Have you ever wondered why there are no pups in all campaigns or expeditions? Well, now there are! This mod adds pups to all campaigns and expeditions with some nice configurable features.\nNote: if you want pups on your expeditions you have to go to More Slugcats options and turn on the cheat that unlock them.\nPinterest artist: Karma_De45.",
+  "requirements": [
+    "rwremix",
+    "moreslugcats"
+  ],
+  "requirements_names": [
+    "Rainworld Remix",
+    "More Slugcats"
+  ],
+  "priorities": [
+    "moreslugcats",
+    "rwremix"
+  ],
+  "checksum_override_version": true
+}
