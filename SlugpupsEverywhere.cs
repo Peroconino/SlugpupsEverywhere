@@ -75,7 +75,7 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
         self.game.GetStorySession.SetRandomSeedToCycleSeed(self.region.regionNumber);
         if (UnityEngine.Random.value >= CalculatePupSpawnChance(self.region.regionParams.slugPupSpawnChance))
         {
-            if (ModManager.DevTools)
+            if (self.game.devToolsActive)
                 Logger.LogInfo(
                 "No slugpups this cycle"
             );
@@ -107,7 +107,7 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
             {
                 if (listOfShelters.Count == 0)
                 {
-                    if (ModManager.DevTools)
+                    if (self.game.devToolsActive)
                         Logger.LogWarning(
                         "No shelters for pup spawns"
                     );
@@ -115,7 +115,7 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
                 }
                 if (listOfShelters.Count == 1)
                 {
-                    if (ModManager.DevTools)
+                    if (self.game.devToolsActive)
                         Logger.LogWarning(
                         "only a SINGLE shelter for pup spawns"
                     );
@@ -139,7 +139,7 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
                 numOfAlivePups++;
                 if (listOfShelters.Count > 1)
                     shelterOrCurrentRoom = listOfShelters[UnityEngine.Random.Range(0, listOfShelters.Count)];
-                if (ModManager.DevTools)
+                if (self.game.devToolsActive)
                     Logger.LogInfo(
                          "Created slugpup! " + slugPup + " at " + shelterOrCurrentRoom.name + " " + shelterOrCurrentRoom.index
                      );
