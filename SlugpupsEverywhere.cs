@@ -44,7 +44,6 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
         {
             IsInit = true;
 
-            //Your hooks go here
             On.World.SpawnPupNPCs += hook_SpawnPupNPCs;
 
             MachineConnector.SetRegisteredOI(GUID, Options);
@@ -76,7 +75,8 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
         self.game.GetStorySession.SetRandomSeedToCycleSeed(self.region.regionNumber);
         if (UnityEngine.Random.value >= CalculatePupSpawnChance(self.region.regionParams.slugPupSpawnChance))
         {
-            Logger.LogInfo(
+            if (ModManager.DevTools)
+                Logger.LogInfo(
                 "No slugpups this cycle"
             );
             UnityEngine.Random.state = state;
@@ -107,14 +107,16 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
             {
                 if (listOfShelters.Count == 0)
                 {
-                    Logger.LogWarning(
+                    if (ModManager.DevTools)
+                        Logger.LogWarning(
                         "No shelters for pup spawns"
                     );
                     return numOfAlivePups;
                 }
                 if (listOfShelters.Count == 1)
                 {
-                    Logger.LogWarning(
+                    if (ModManager.DevTools)
+                        Logger.LogWarning(
                         "only a SINGLE shelter for pup spawns"
                     );
                     shelterOrCurrentRoom = listOfShelters[0];
@@ -137,9 +139,10 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
                 numOfAlivePups++;
                 if (listOfShelters.Count > 1)
                     shelterOrCurrentRoom = listOfShelters[UnityEngine.Random.Range(0, listOfShelters.Count)];
-                Logger.LogInfo(
-                    "Created slugpup! " + slugPup + " at " + shelterOrCurrentRoom.name + " " + shelterOrCurrentRoom.index
-                );
+                if (ModManager.DevTools)
+                    Logger.LogInfo(
+                         "Created slugpup! " + slugPup + " at " + shelterOrCurrentRoom.name + " " + shelterOrCurrentRoom.index
+                     );
             }
         }
         UnityEngine.Random.state = state;
