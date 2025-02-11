@@ -167,15 +167,7 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
             return 1000;
         }
 
-        if (saveState.saveStateNumber == SlugcatStats.Name.Yellow || saveState.saveStateNumber == SlugcatStats.Name.White || saveState.saveStateNumber == SlugcatStats.Name.Red ||
-        saveState.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Gourmand || saveState.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Artificer ||
-        saveState.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Rivulet || saveState.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Spear ||
-        saveState.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Saint)
-        {
-            return Options.AmountOfPups.Value;
-        }
-
-        return 0;
+        return Options.AmountOfPups.Value;
     }
     private float CalculatePupSpawnChance(float origPupSpawnChance)
     {
