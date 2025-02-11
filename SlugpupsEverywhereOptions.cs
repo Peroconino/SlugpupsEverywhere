@@ -18,6 +18,7 @@ public class SlugpupsEverywhereOptions : OptionInterface
     public readonly Configurable<bool> AllowSaintCampaignSlugpups;
     public readonly Configurable<bool> IsCustomSlugpupSpawnChance;
     public readonly Configurable<bool> IsByPassAllowedNumOfPups;
+    public readonly Configurable<bool> AllowPupsInExpedition;
     public readonly Configurable<int> AmountOfPups;
     public readonly Configurable<float> SlugpupSpawnChance;
     private UIelement[]? UIArrPlayerOptions;
@@ -36,6 +37,7 @@ public class SlugpupsEverywhereOptions : OptionInterface
         AllowSaintCampaignSlugpups = this.config.Bind<bool>(nameof(AllowSaintCampaignSlugpups), true, new ConfigAcceptableRange<bool>(false, true));
         IsCustomSlugpupSpawnChance = this.config.Bind<bool>(nameof(IsCustomSlugpupSpawnChance), false, new ConfigAcceptableRange<bool>(false, true));
         IsByPassAllowedNumOfPups = this.config.Bind<bool>(nameof(IsByPassAllowedNumOfPups), false, new ConfigAcceptableRange<bool>(false, true));
+        AllowPupsInExpedition = this.config.Bind<bool>(nameof(AllowPupsInExpedition), true, new ConfigAcceptableRange<bool>(false, true));
     }
     public override void Initialize()
     {
@@ -73,6 +75,8 @@ public class SlugpupsEverywhereOptions : OptionInterface
             new OpLabel(10f, 190f, "Do you want a custom pup spawn chance?", true),
             new OpCheckBox(IsCustomSlugpupSpawnChance,new Vector2(430f, 190f)),
             new OpFloatSlider(SlugpupSpawnChance, new Vector2(20f, 140f), 360, 2),
+            new OpLabel(10f,110f,"Allow pups to be spawned in expedition?"),
+            new OpCheckBox(AllowPupsInExpedition,new Vector2(270f,110f)),
         ];
         opTab.AddItems(UIArrPlayerOptions);
     }

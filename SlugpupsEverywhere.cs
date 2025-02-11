@@ -4,6 +4,7 @@ using System.Security.Permissions;
 using BepInEx;
 using MoreSlugcats;
 using System.Collections.Generic;
+using RWCustom;
 
 #pragma warning disable CS0618
 
@@ -150,7 +151,7 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
     }
     private int CalculatePupNumber(SaveState saveState)
     {
-        if (Options is null || !ModManager.MSC || !(saveState.progression.miscProgressionData.beaten_Gourmand_Full || MoreSlugcats.MoreSlugcats.chtUnlockSlugpups.Value))
+        if (Options is null || !ModManager.MSC || !(saveState.progression.miscProgressionData.beaten_Gourmand_Full || MoreSlugcats.MoreSlugcats.chtUnlockSlugpups.Value || (ModManager.Expedition && Custom.rainWorld.ExpeditionMode && Options.AllowPupsInExpedition.Value)))
         {
             return 0;
         }
