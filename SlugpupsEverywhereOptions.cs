@@ -1,3 +1,4 @@
+using System;
 using BepInEx.Logging;
 using Menu.Remix.MixedUI;
 using Menu.Remix.MixedUI.ValueTypes;
@@ -25,7 +26,7 @@ public class SlugpupsEverywhereOptions : OptionInterface
     public SlugpupsEverywhereOptions(SlugpupsEverywhere modInstance, ManualLogSource loggerSource)
     {
         Logger = loggerSource;
-        AmountOfPups = this.config.Bind<int>(nameof(AmountOfPups), 2, new ConfigAcceptableRange<int>(0, 1000));
+        AmountOfPups = this.config.Bind<int>(nameof(AmountOfPups), 2, new ConfigAcceptableRange<int>(0, 500));
         SlugpupSpawnChance = this.config.Bind<float>(nameof(SlugpupSpawnChance), 1, new ConfigAcceptableRange<float>(0, 1));
         AllowWhiteCampaignSlugpups = this.config.Bind<bool>(nameof(AllowWhiteCampaignSlugpups), true, new ConfigAcceptableRange<bool>(false, true));
         AllowYellowCampaignSlugpups = this.config.Bind<bool>(nameof(AllowYellowCampaignSlugpups), true, new ConfigAcceptableRange<bool>(false, true));
@@ -51,7 +52,7 @@ public class SlugpupsEverywhereOptions : OptionInterface
         [
             new OpLabel(10f, 570f, "Options", true),
             new OpLabel(10f, 540f, "Possible amount of pups to spawn in the region"),
-            new OpSlider(AmountOfPups, new Vector2(20f, 490f),0.5f),
+            new OpSlider(AmountOfPups, new Vector2(20f, 490f),1.1f),
             new OpLabel(10f, 450f, "Bypass allowed numbers of pups in a region?"),
             new OpCheckBox(IsByPassAllowedNumOfPups, new Vector2(270f, 450f)),
             new OpLabel(10f, 410f, "Note: If you want to bypass the allowed number of pups in a region, you can set this to true. This will\n allow you to spawn as many pups as you want in a region."),
@@ -74,9 +75,9 @@ public class SlugpupsEverywhereOptions : OptionInterface
             new OpCheckBox(AllowSaintCampaignSlugpups, new Vector2(460f, 250f)),
             new OpLabel(10f, 190f, "Do you want a custom pup spawn chance?", true),
             new OpCheckBox(IsCustomSlugpupSpawnChance,new Vector2(430f, 190f)),
-            new OpFloatSlider(SlugpupSpawnChance, new Vector2(20f, 140f), 360, 2),
-            new OpLabel(10f,110f,"Allow pups to be spawned in expedition?"),
-            new OpCheckBox(AllowPupsInExpedition,new Vector2(270f,110f)),
+            new OpFloatSlider(SlugpupSpawnChance, new Vector2(20f, 140f), 545, 2),
+            new OpLabel(10f,100f,"Allow pups to be spawned in expedition?"),
+            new OpCheckBox(AllowPupsInExpedition,new Vector2(240f,100f)),
         ];
         opTab.AddItems(UIArrPlayerOptions);
     }
