@@ -19,7 +19,7 @@ namespace SlugpupsEverywhere;
 public partial class SlugpupsEverywhere : BaseUnityPlugin
 {
     public const string GUID = "Peroconino.SlugpupsEverywhere";
-    public const string Version = "1.0.0";
+    public const string Version = "1.1.2";
     public const string Name = "Pups Everywhere";
     private readonly SlugpupsEverywhereOptions? Options;
     private bool IsInit, hasPupKarmaMod;
