@@ -1,17 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net4.8.1</TargetFramework>
+		<TargetFramework>net4.8</TargetFramework>
 		<LangVersion>Latest</LangVersion>
 		<RainWorldDir>C:\Program Files (x86)\Steam\steamapps\common\Rain World</RainWorldDir>
-		<RainWorldWorkshopDir>C:\Program Files (x86)\Steam\steamapps\workshop\content\312520</RainWorldWorkshopDir>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Reference Include="PupKarma">
-			<HintPath>$(RainWorldWorkshopDir)\3333225072\plugins\PupKarma.dll</HintPath>
-		</Reference>
 		<Reference Include="0Harmony">
 			<HintPath>$(RainWorldDir)\BepInEx\core\0Harmony.dll</HintPath>
 		</Reference>
