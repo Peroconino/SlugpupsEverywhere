@@ -75,11 +75,11 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
 
         UnityEngine.Random.State state = UnityEngine.Random.state;
         self.game.GetStorySession.SetRandomSeedToCycleSeed(self.region.regionNumber);
-        if (UnityEngine.Random.value >= CalculatePupSpawnChance(self.region.regionParams.slugPupSpawnChance))
+        if (UnityEngine.Random.value >= CalculatePupSpawnChance(self.region.regionParams.slugPupSpawnChance) && self.game.GetStorySession.saveStateNumber != MoreSlugcatsEnums.SlugcatStatsName.Sofanthiel && self.game.GetStorySession.saveState.forcePupsNextCycle != 1)
         {
             if (ModManager.DevTools)
                 Logger.LogInfo(
-                "No slugpups this cycle"
+                $"No slugpups this cycle, region spawn chance: {self.region.regionParams.slugPupSpawnChance}"
             );
             UnityEngine.Random.state = state;
             return numOfAlivePups;
@@ -99,8 +99,8 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
 
             int allowedNumOfPups = Options!.IsByPassAllowedNumOfPups.Value ? Options.AmountOfPups.Value : 1;
             AbstractRoom shelterOrCurrentRoom;
-            if (self.game.GetStorySession.saveState.forcePupsNextCycle >= 1)
-            {//REVIEW - Deixando em >= 1 faz com que continue nascendo filhotes mesmo sendo que eles tenham sobrevivido a mais de 1 ciclo
+            if (self.game.GetStorySession.saveState.forcePupsNextCycle == 1)
+            {
                 shelterOrCurrentRoom = currentPlayerRoom;
                 allowedNumOfPups = slugPupMaxCount - numOfAlivePups;
                 self.game.GetStorySession.saveState.forcePupsNextCycle = 2;
@@ -142,7 +142,7 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
 
                 (slugPup.state as PlayerNPCState)!.foodInStomach = 1;
                 numOfAlivePups++;
-                if (allowedNumOfPups > 2 && listOfShelters.Count > 1)// um jeito de consertar o final da campanha do gourmand com allowedNumOfPups > 2
+                if (j > 2 && listOfShelters.Count > 1)// um jeito de consertar o final da campanha do gourmand com j > 2
                     shelterOrCurrentRoom = listOfShelters[UnityEngine.Random.Range(0, listOfShelters.Count)];
 
                 if (ModManager.DevTools)
