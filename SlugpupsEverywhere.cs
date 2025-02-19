@@ -86,6 +86,8 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
         }
 
         int slugPupMaxCount = CalculatePupNumber(self.game.GetStorySession.saveState);
+
+        CustomLogger!.LogInfo($"Allowed number of pups to spawn this cycle: {slugPupMaxCount - numOfAlivePups}");
         if (numOfAlivePups < slugPupMaxCount)
         {
             List<AbstractRoom> listOfShelters = [];
@@ -97,12 +99,11 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
                 }
             }
 
-            int allowedNumOfPups = Options!.IsByPassAllowedNumOfPups.Value ? Options.AmountOfPups.Value - numOfAlivePups : 1;
+            int allowedNumOfPups = Options!.IsByPassAllowedNumOfPups.Value ? slugPupMaxCount - numOfAlivePups : 1;
             AbstractRoom shelterOrCurrentRoom;
             if (self.game.GetStorySession.saveState.forcePupsNextCycle == 1)
             {
                 shelterOrCurrentRoom = currentPlayerRoom;
-                allowedNumOfPups = slugPupMaxCount - numOfAlivePups;
                 self.game.GetStorySession.saveState.forcePupsNextCycle = 2;
             }
             else
@@ -132,8 +133,7 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
             }
 
 
-            CustomLogger!.LogInfo(
-                     "Allowed number of pups to spawn this cycle: " + allowedNumOfPups);
+
 
             for (int j = 0; j < allowedNumOfPups; j++)
             {
