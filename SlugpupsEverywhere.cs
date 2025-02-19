@@ -20,16 +20,17 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
     public const string Version = "1.0.2";
     public const string Name = "Pups Everywhere";
     private readonly SlugpupsEverywhereOptions? Options;
+    private CustomLogger? CustomLogger;
     private bool IsInit;
     public SlugpupsEverywhere()
     {
         try
         {
-            Options = new SlugpupsEverywhereOptions(this, Logger);
+            Options = new SlugpupsEverywhereOptions(this, CustomLogger!);
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex);
+            CustomLogger!.LogError(ex);
         }
     }
     public void OnEnable()
@@ -43,15 +44,17 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
 
         try
         {
-            IsInit = true;
+            CustomLogger = new CustomLogger(Logger);
 
             On.World.SpawnPupNPCs += hook_SpawnPupNPCs;
 
             MachineConnector.SetRegisteredOI(GUID, Options);
+
+            IsInit = true;
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex);
+            CustomLogger!.LogError(ex);
         }
     }
     public int hook_SpawnPupNPCs(On.World.orig_SpawnPupNPCs _orig, World self)
@@ -77,10 +80,7 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
         self.game.GetStorySession.SetRandomSeedToCycleSeed(self.region.regionNumber);
         if (UnityEngine.Random.value >= CalculatePupSpawnChance(self.region.regionParams.slugPupSpawnChance) && self.game.GetStorySession.saveStateNumber != MoreSlugcatsEnums.SlugcatStatsName.Sofanthiel && self.game.GetStorySession.saveState.forcePupsNextCycle != 1)
         {
-            if (ModManager.DevTools)
-                Logger.LogInfo(
-                $"No slugpups this cycle, region spawn chance: {self.region.regionParams.slugPupSpawnChance}"
-            );
+            CustomLogger!.LogInfo($"No slugpups this cycle, region spawn chance: {self.region.regionParams.slugPupSpawnChance}");
             UnityEngine.Random.state = state;
             return numOfAlivePups;
         }
@@ -97,7 +97,7 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
                 }
             }
 
-            int allowedNumOfPups = Options!.IsByPassAllowedNumOfPups.Value ? Options.AmountOfPups.Value : 1;
+            int allowedNumOfPups = Options!.IsByPassAllowedNumOfPups.Value ? Options.AmountOfPups.Value - numOfAlivePups : 1;
             AbstractRoom shelterOrCurrentRoom;
             if (self.game.GetStorySession.saveState.forcePupsNextCycle == 1)
             {
@@ -109,8 +109,8 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
             {
                 if (listOfShelters.Count == 0)
                 {
-                    if (ModManager.DevTools)
-                        Logger.LogWarning(
+
+                    CustomLogger!.LogWarning(
                         "No shelters for pup spawns"
                     );
                     return numOfAlivePups;
@@ -118,8 +118,8 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
 
                 if (listOfShelters.Count == 1)
                 {
-                    if (ModManager.DevTools)
-                        Logger.LogWarning(
+
+                    CustomLogger!.LogWarning(
                         "only a SINGLE shelter for pup spawns"
                     );
                     shelterOrCurrentRoom = listOfShelters[0];
@@ -130,6 +130,10 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
                 }
 
             }
+
+
+            CustomLogger!.LogInfo(
+                     "Allowed number of pups to spawn this cycle: " + allowedNumOfPups);
 
             for (int j = 0; j < allowedNumOfPups; j++)
             {
@@ -145,11 +149,8 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
                 if (j > 2 && listOfShelters.Count > 1)// um jeito de consertar o final da campanha do gourmand com j > 2
                     shelterOrCurrentRoom = listOfShelters[UnityEngine.Random.Range(0, listOfShelters.Count)];
 
-                if (ModManager.DevTools)
-                    Logger.LogInfo(
-                         "Created slugpup! " + slugPup + " at " + shelterOrCurrentRoom.name + " " + shelterOrCurrentRoom.index
-                     );
 
+                CustomLogger.LogInfo("Created slugpup! " + slugPup + " at " + shelterOrCurrentRoom.name + " " + shelterOrCurrentRoom.index);
             }
         }
 

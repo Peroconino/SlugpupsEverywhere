@@ -8,7 +8,7 @@ namespace SlugpupsEverywhere;
 
 public class SlugpupsEverywhereOptions : OptionInterface
 {
-    private readonly ManualLogSource Logger;
+    private readonly CustomLogger Logger;
     public readonly Configurable<bool> AllowYellowCampaignSlugpups;
     public readonly Configurable<bool> AllowWhiteCampaignSlugpups;
     public readonly Configurable<bool> AllowRedCampaignSlugpups;
@@ -23,7 +23,7 @@ public class SlugpupsEverywhereOptions : OptionInterface
     public readonly Configurable<int> AmountOfPups;
     public readonly Configurable<float> SlugpupSpawnChance;
     private UIelement[]? UIArrPlayerOptions;
-    public SlugpupsEverywhereOptions(SlugpupsEverywhere modInstance, ManualLogSource loggerSource)
+    public SlugpupsEverywhereOptions(SlugpupsEverywhere modInstance, CustomLogger loggerSource)
     {
         Logger = loggerSource;
         AmountOfPups = this.config.Bind<int>(nameof(AmountOfPups), 2, new ConfigAcceptableRange<int>(0, 500));
