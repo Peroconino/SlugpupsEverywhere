@@ -23,22 +23,22 @@ public class SlugpupsEverywhereOptions : OptionInterface
     public readonly Configurable<int> AmountOfPups;
     public readonly Configurable<float> SlugpupSpawnChance;
     private UIelement[]? UIArrPlayerOptions;
-    public SlugpupsEverywhereOptions(SlugpupsEverywhere modInstance, CustomLogger loggerSource)
+    public SlugpupsEverywhereOptions(CustomLogger loggerSource)
     {
         Logger = loggerSource;
-        AmountOfPups = this.config.Bind<int>(nameof(AmountOfPups), 2, new ConfigAcceptableRange<int>(0, 500));
+        AmountOfPups = this.config.Bind(nameof(AmountOfPups), 2, new ConfigAcceptableRange<int>(0, 500));
         SlugpupSpawnChance = this.config.Bind<float>(nameof(SlugpupSpawnChance), 1, new ConfigAcceptableRange<float>(0, 1));
-        AllowWhiteCampaignSlugpups = this.config.Bind<bool>(nameof(AllowWhiteCampaignSlugpups), true, new ConfigAcceptableRange<bool>(false, true));
-        AllowYellowCampaignSlugpups = this.config.Bind<bool>(nameof(AllowYellowCampaignSlugpups), true, new ConfigAcceptableRange<bool>(false, true));
-        AllowRedCampaignSlugpups = this.config.Bind<bool>(nameof(AllowRedCampaignSlugpups), true, new ConfigAcceptableRange<bool>(false, true));
-        AllowGourmandCampaignSlugpups = this.config.Bind<bool>(nameof(AllowGourmandCampaignSlugpups), true, new ConfigAcceptableRange<bool>(false, true));
-        AllowArtificerCampaignSlugpups = this.config.Bind<bool>(nameof(AllowArtificerCampaignSlugpups), true, new ConfigAcceptableRange<bool>(false, true));
-        AllowRivuletCampaignSlugpups = this.config.Bind<bool>(nameof(AllowRivuletCampaignSlugpups), true, new ConfigAcceptableRange<bool>(false, true));
-        AllowSpearmasterCampaignSlugpups = this.config.Bind<bool>(nameof(AllowSpearmasterCampaignSlugpups), true, new ConfigAcceptableRange<bool>(false, true));
-        AllowSaintCampaignSlugpups = this.config.Bind<bool>(nameof(AllowSaintCampaignSlugpups), true, new ConfigAcceptableRange<bool>(false, true));
-        IsCustomSlugpupSpawnChance = this.config.Bind<bool>(nameof(IsCustomSlugpupSpawnChance), false, new ConfigAcceptableRange<bool>(false, true));
-        IsByPassAllowedNumOfPups = this.config.Bind<bool>(nameof(IsByPassAllowedNumOfPups), false, new ConfigAcceptableRange<bool>(false, true));
-        AllowPupsInExpedition = this.config.Bind<bool>(nameof(AllowPupsInExpedition), true, new ConfigAcceptableRange<bool>(false, true));
+        AllowWhiteCampaignSlugpups = this.config.Bind(nameof(AllowWhiteCampaignSlugpups), true, new ConfigAcceptableRange<bool>(false, true));
+        AllowYellowCampaignSlugpups = this.config.Bind(nameof(AllowYellowCampaignSlugpups), true, new ConfigAcceptableRange<bool>(false, true));
+        AllowRedCampaignSlugpups = this.config.Bind(nameof(AllowRedCampaignSlugpups), true, new ConfigAcceptableRange<bool>(false, true));
+        AllowGourmandCampaignSlugpups = this.config.Bind(nameof(AllowGourmandCampaignSlugpups), true, new ConfigAcceptableRange<bool>(false, true));
+        AllowArtificerCampaignSlugpups = this.config.Bind(nameof(AllowArtificerCampaignSlugpups), true, new ConfigAcceptableRange<bool>(false, true));
+        AllowRivuletCampaignSlugpups = this.config.Bind(nameof(AllowRivuletCampaignSlugpups), true, new ConfigAcceptableRange<bool>(false, true));
+        AllowSpearmasterCampaignSlugpups = this.config.Bind(nameof(AllowSpearmasterCampaignSlugpups), true, new ConfigAcceptableRange<bool>(false, true));
+        AllowSaintCampaignSlugpups = this.config.Bind(nameof(AllowSaintCampaignSlugpups), true, new ConfigAcceptableRange<bool>(false, true));
+        IsCustomSlugpupSpawnChance = this.config.Bind(nameof(IsCustomSlugpupSpawnChance), false, new ConfigAcceptableRange<bool>(false, true));
+        IsByPassAllowedNumOfPups = this.config.Bind(nameof(IsByPassAllowedNumOfPups), false, new ConfigAcceptableRange<bool>(false, true));
+        AllowPupsInExpedition = this.config.Bind(nameof(AllowPupsInExpedition), true, new ConfigAcceptableRange<bool>(false, true));
     }
     public override void Initialize()
     {

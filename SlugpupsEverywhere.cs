@@ -5,6 +5,7 @@ using BepInEx;
 using MoreSlugcats;
 using System.Collections.Generic;
 using RWCustom;
+using System.Linq;
 
 #pragma warning disable CS0618
 
@@ -17,16 +18,17 @@ namespace SlugpupsEverywhere;
 public partial class SlugpupsEverywhere : BaseUnityPlugin
 {
     public const string GUID = "Peroconino.SlugpupsEverywhere";
-    public const string Version = "1.0.2";
+    public const string Version = "1.0.3";
     public const string Name = "Pups Everywhere";
     private readonly SlugpupsEverywhereOptions? Options;
-    private CustomLogger? CustomLogger;
+    private readonly CustomLogger CustomLogger;
     private bool IsInit;
     public SlugpupsEverywhere()
     {
         try
         {
-            Options = new SlugpupsEverywhereOptions(this, CustomLogger!);
+            Options = new SlugpupsEverywhereOptions(CustomLogger!);
+            CustomLogger = new CustomLogger();
         }
         catch (Exception ex)
         {
@@ -44,8 +46,6 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
 
         try
         {
-            CustomLogger = new CustomLogger(Logger);
-
             On.World.SpawnPupNPCs += hook_SpawnPupNPCs;
 
             MachineConnector.SetRegisteredOI(GUID, Options);
@@ -57,8 +57,9 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
             CustomLogger!.LogError(ex);
         }
     }
-    public int hook_SpawnPupNPCs(On.World.orig_SpawnPupNPCs _orig, World self)
+    public int hook_SpawnPupNPCs(On.World.orig_SpawnPupNPCs orig, World self)
     {
+
         if (self.game.world.singleRoomWorld || self.game.rainWorld.safariMode || self.game.wasAnArtificerDream || self.game.GetStorySession.Players.Count == 0)
         {
             return 0;
@@ -103,6 +104,7 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
             AbstractRoom shelterOrCurrentRoom;
             if (self.game.GetStorySession.saveState.forcePupsNextCycle == 1)
             {
+                CustomLogger.LogInfo("Pups forced into this cycle!");
                 shelterOrCurrentRoom = currentPlayerRoom;
                 self.game.GetStorySession.saveState.forcePupsNextCycle = 2;
             }
@@ -137,6 +139,9 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
 
             for (int j = 0; j < allowedNumOfPups; j++)
             {
+                if (j > 2 && listOfShelters.Count > 1)// um jeito de consertar o final da campanha do gourmand com j > 2
+                    shelterOrCurrentRoom = listOfShelters[UnityEngine.Random.Range(0, listOfShelters.Count)];
+
                 AbstractCreature slugPup = new(self, StaticWorld.GetCreatureTemplate(MoreSlugcatsEnums.CreatureTemplateType.SlugNPC), null, new WorldCoordinate(shelterOrCurrentRoom.index, -1, -1, 0), self.game.GetNewID());
                 shelterOrCurrentRoom.AddEntity(slugPup);
                 if (shelterOrCurrentRoom.realizedRoom != null)
@@ -146,9 +151,6 @@ public partial class SlugpupsEverywhere : BaseUnityPlugin
 
                 (slugPup.state as PlayerNPCState)!.foodInStomach = 1;
                 numOfAlivePups++;
-                if (j > 2 && listOfShelters.Count > 1)// um jeito de consertar o final da campanha do gourmand com j > 2
-                    shelterOrCurrentRoom = listOfShelters[UnityEngine.Random.Range(0, listOfShelters.Count)];
-
 
                 CustomLogger.LogInfo("Created slugpup! " + slugPup + " at " + shelterOrCurrentRoom.name + " " + shelterOrCurrentRoom.index);
             }

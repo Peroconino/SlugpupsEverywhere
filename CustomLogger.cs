@@ -1,10 +1,14 @@
 using BepInEx.Logging;
 
 namespace SlugpupsEverywhere;
-public class CustomLogger(ManualLogSource logger)
+public class CustomLogger
 {
-  private readonly ManualLogSource _logger = logger;
+  private readonly ManualLogSource _logger;
   private static bool ShouldLog => ModManager.DevTools;
+  public CustomLogger()
+  {
+    _logger = Logger.CreateLogSource(SlugpupsEverywhere.Name);
+  }
   public void LogInfo(object data)
   {
     if (ShouldLog)
