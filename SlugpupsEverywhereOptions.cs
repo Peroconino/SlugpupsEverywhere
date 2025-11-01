@@ -85,7 +85,7 @@ namespace SlugpupsEverywhere
                 new OpCheckBox(AllowSpearmasterCampaignSlugpups, new Vector2(160f, 190f)),
                 new OpLabel(310f, 220f, SlugpupsEverywhereTranslator.GetTheWatcherText(), false),
                 new OpCheckBox(AllowTheWatcherCampaignSlugpups, new Vector2(310f, 190f)),
-                new OpLabel(10f, 140f, SlugpupsEverywhereTranslator.GetCustomSpawnText(), true),
+                new OpLabel(10f, 140f, SlugpupsEverywhereTranslator.GetCustomSpawnText(), false),
                 new OpCheckBox(IsCustomSlugpupSpawnChance, new Vector2(520f, 140f)),
                 new OpFloatSlider(SlugpupSpawnChance, new Vector2(20f, 90f), 545, 2, false),
                 new OpLabel(10f, 50f, SlugpupsEverywhereTranslator.GetExpeditionText(), false),
