@@ -1,5 +1,6 @@
 ﻿using Menu.Remix.MixedUI;
 using Menu.Remix.MixedUI.ValueTypes;
+using RWCustom;
 using UnityEngine;
 
 namespace SlugpupsEverywhere
@@ -15,87 +16,106 @@ namespace SlugpupsEverywhere
         public readonly Configurable<bool> AllowRivuletCampaignSlugpups;
         public readonly Configurable<bool> AllowSpearmasterCampaignSlugpups;
         public readonly Configurable<bool> AllowSaintCampaignSlugpups;
+        public readonly Configurable<bool> AllowTheWatcherCampaignSlugpups;
         public readonly Configurable<bool> IsCustomSlugpupSpawnChance;
         public readonly Configurable<bool> IsByPassAllowedNumOfPups;
         public readonly Configurable<bool> AllowPupsInExpedition;
         public readonly Configurable<int> AmountOfPups;
+        public readonly Configurable<int> CappedSpawnAmount;
         public readonly Configurable<float> SlugpupSpawnChance;
-        public InGameTranslator InGameTranslator;
-
         private UIelement[] UIArrPlayerOptions;
+        private UIelement[] UIArrCapabilitiesOptions;
         public SlugpupsEverywhereOptions(CustomLogger loggerSource)
         {
-            this.Logger = loggerSource;
-            this.AmountOfPups = this.config.Bind<int>("AmountOfPups", 2, new ConfigAcceptableRange<int>(0, 500));
-            this.SlugpupSpawnChance = this.config.Bind<float>("SlugpupSpawnChance", 1f, new ConfigAcceptableRange<float>(0f, 1f));
-            this.AllowWhiteCampaignSlugpups = this.config.Bind<bool>("AllowWhiteCampaignSlugpups", true, new ConfigAcceptableRange<bool>(false, true));
-            this.AllowYellowCampaignSlugpups = this.config.Bind<bool>("AllowYellowCampaignSlugpups", true, new ConfigAcceptableRange<bool>(false, true));
-            this.AllowRedCampaignSlugpups = this.config.Bind<bool>("AllowRedCampaignSlugpups", true, new ConfigAcceptableRange<bool>(false, true));
-            this.AllowGourmandCampaignSlugpups = this.config.Bind<bool>("AllowGourmandCampaignSlugpups", true, new ConfigAcceptableRange<bool>(false, true));
-            this.AllowArtificerCampaignSlugpups = this.config.Bind<bool>("AllowArtificerCampaignSlugpups", true, new ConfigAcceptableRange<bool>(false, true));
-            this.AllowRivuletCampaignSlugpups = this.config.Bind<bool>("AllowRivuletCampaignSlugpups", true, new ConfigAcceptableRange<bool>(false, true));
-            this.AllowSpearmasterCampaignSlugpups = this.config.Bind<bool>("AllowSpearmasterCampaignSlugpups", true, new ConfigAcceptableRange<bool>(false, true));
-            this.AllowSaintCampaignSlugpups = this.config.Bind<bool>("AllowSaintCampaignSlugpups", true, new ConfigAcceptableRange<bool>(false, true));
-            this.IsCustomSlugpupSpawnChance = this.config.Bind<bool>("IsCustomSlugpupSpawnChance", false, new ConfigAcceptableRange<bool>(false, true));
-            this.IsByPassAllowedNumOfPups = this.config.Bind<bool>("IsByPassAllowedNumOfPups", false, new ConfigAcceptableRange<bool>(false, true));
-            this.AllowPupsInExpedition = this.config.Bind<bool>("AllowPupsInExpedition", true, new ConfigAcceptableRange<bool>(false, true));
+            Logger = loggerSource;
+            AmountOfPups = config.Bind<int>("AmountOfPups", 7, new ConfigAcceptableRange<int>(0, 500));
+            CappedSpawnAmount = config.Bind<int>("CappedSpawnAmount", 500, new ConfigAcceptableRange<int>(0, 500));
+            SlugpupSpawnChance = config.Bind<float>("SlugpupSpawnChance", 1f, new ConfigAcceptableRange<float>(0f, 1f));
+            AllowWhiteCampaignSlugpups = config.Bind<bool>("AllowWhiteCampaignSlugpups", true, new ConfigAcceptableRange<bool>(false, true));
+            AllowYellowCampaignSlugpups = config.Bind<bool>("AllowYellowCampaignSlugpups", true, new ConfigAcceptableRange<bool>(false, true));
+            AllowRedCampaignSlugpups = config.Bind<bool>("AllowRedCampaignSlugpups", true, new ConfigAcceptableRange<bool>(false, true));
+            AllowGourmandCampaignSlugpups = config.Bind<bool>("AllowGourmandCampaignSlugpups", true, new ConfigAcceptableRange<bool>(false, true));
+            AllowArtificerCampaignSlugpups = config.Bind<bool>("AllowArtificerCampaignSlugpups", true, new ConfigAcceptableRange<bool>(false, true));
+            AllowRivuletCampaignSlugpups = config.Bind<bool>("AllowRivuletCampaignSlugpups", true, new ConfigAcceptableRange<bool>(false, true));
+            AllowSpearmasterCampaignSlugpups = config.Bind<bool>("AllowSpearmasterCampaignSlugpups", true, new ConfigAcceptableRange<bool>(false, true));
+            AllowSaintCampaignSlugpups = config.Bind<bool>("AllowSaintCampaignSlugpups", true, new ConfigAcceptableRange<bool>(false, true));
+            AllowTheWatcherCampaignSlugpups = config.Bind<bool>("AllowTheWatcherCampaignSlugpups", true, new ConfigAcceptableRange<bool>(false, true));
+            IsCustomSlugpupSpawnChance = config.Bind<bool>("IsCustomSlugpupSpawnChance", true, new ConfigAcceptableRange<bool>(false, true));
+            IsByPassAllowedNumOfPups = config.Bind<bool>("IsByPassAllowedNumOfPups", true, new ConfigAcceptableRange<bool>(false, true));
+            AllowPupsInExpedition = config.Bind<bool>("AllowPupsInExpedition", true, new ConfigAcceptableRange<bool>(false, true));
         }
 
         public override void Initialize()
         {
-            string optionsString = InGameTranslator.Translate("Options");
-            OpTab opTab = new(this, optionsString);
-            this.Tabs =
+            InGameTranslator inGameTranslator = Custom.rainWorld.inGameTranslator;
+
+
+
+            OpTab opTab = new(this, inGameTranslator.Translate("Options"));
+            OpTab capTab = new(this, SlugpupsEverywhereTranslator.GetCapabilitiesText());
+            Tabs =
             [
-                opTab
+                opTab,
+                capTab,
             ];
-            this.UIArrPlayerOptions =
+            UIArrPlayerOptions =
             [
-                new OpLabel(10f, 570f, "Options", true),
-                new OpLabel(10f, 540f, "Possible amount of pups to spawn in the region", false),
-                new OpSlider(this.AmountOfPups, new Vector2(20f, 490f), 1.1f, false),
-                new OpLabel(10f, 450f, "Bypass allowed numbers of pups in a region?", false),
-                new OpCheckBox(this.IsByPassAllowedNumOfPups, new Vector2(270f, 450f)),
-                new OpLabel(10f, 410f, "Note: If you want to bypass the allowed number of pups in a region, you can set this to true. This will\n allow you to spawn as many pups as you want in a region.", false),
-                new OpLabel(10f, 370f, "Allow pups to spawn on:", true),
-                new OpLabel(10f, 340f, "Monk campaign", false),
-                new OpCheckBox(this.AllowYellowCampaignSlugpups, new Vector2(10f, 310f)),
-                new OpLabel(10f, 280f, "Survivor campaign", false),
-                new OpCheckBox(this.AllowWhiteCampaignSlugpups, new Vector2(10f, 250f)),
-                new OpLabel(160f, 340f, "Hunter campaign", false),
-                new OpCheckBox(this.AllowRedCampaignSlugpups, new Vector2(160f, 310f)),
-                new OpLabel(160f, 280f, "Gourmand campaign", false),
-                new OpCheckBox(this.AllowGourmandCampaignSlugpups, new Vector2(160f, 250f)),
-                new OpLabel(310f, 340f, "Artificer campaign", false),
-                new OpCheckBox(this.AllowArtificerCampaignSlugpups, new Vector2(310f, 310f)),
-                new OpLabel(310f, 280f, "Rivulet campaign", false),
-                new OpCheckBox(this.AllowRivuletCampaignSlugpups, new Vector2(310f, 250f)),
-                new OpLabel(460f, 340f, "Spearmaster campaign", false),
-                new OpCheckBox(this.AllowSpearmasterCampaignSlugpups, new Vector2(460f, 310f)),
-                new OpLabel(460f, 280f, "Saint campaign", false),
-                new OpCheckBox(this.AllowSaintCampaignSlugpups, new Vector2(460f, 250f)),
-                new OpLabel(10f, 190f, "Do you want a custom pup spawn chance?", true),
-                new OpCheckBox(this.IsCustomSlugpupSpawnChance, new Vector2(430f, 190f)),
-                new OpFloatSlider(this.SlugpupSpawnChance, new Vector2(20f, 140f), 545, 2, false),
-                new OpLabel(10f, 100f, "Allow pups to be spawned in expedition?", false),
-                new OpCheckBox(this.AllowPupsInExpedition, new Vector2(240f, 100f))
+                new OpLabel(10f, 570f, inGameTranslator.Translate("Options"), true),
+                new OpLabel(10f, 540f, SlugpupsEverywhereTranslator.GetQuantityText() , false),
+                new OpSlider(AmountOfPups, new Vector2(20f, 490f), 1.1f, false),
+                new OpLabel(10f, 470f, SlugpupsEverywhereTranslator.GetByPassText(), false),
+                new OpCheckBox(IsByPassAllowedNumOfPups, new Vector2(20f, 440f)),
+                new OpLabel(10f, 410f, SlugpupsEverywhereTranslator.GetNoteText(), false),
+                new OpLabel(10f, 370f, SlugpupsEverywhereTranslator.GetAllowText(), true),
+                new OpLabel(10f, 340f, SlugpupsEverywhereTranslator.GetMonkText(), false),
+                new OpCheckBox(AllowYellowCampaignSlugpups, new Vector2(10f, 310f)),
+                new OpLabel(160f, 340f, SlugpupsEverywhereTranslator.GetHunterText(), false),
+                new OpCheckBox(AllowRedCampaignSlugpups, new Vector2(160f, 310f)),
+                new OpLabel(310f, 340f, SlugpupsEverywhereTranslator.GetArtificierText(), false),
+                new OpCheckBox(AllowArtificerCampaignSlugpups, new Vector2(310f, 310f)),
+                new OpLabel(10f, 280f, SlugpupsEverywhereTranslator.GetSurvivorText(), false),
+                new OpCheckBox(AllowWhiteCampaignSlugpups, new Vector2(10f, 250f)),
+                new OpLabel(160f, 280f, SlugpupsEverywhereTranslator.GetRivuletText(), false),
+                new OpCheckBox(AllowRivuletCampaignSlugpups, new Vector2(160f, 250f)),
+                new OpLabel(310f, 280f, SlugpupsEverywhereTranslator.GetSaintText(), false),
+                new OpCheckBox(AllowSaintCampaignSlugpups, new Vector2(310f, 250f)),
+                new OpLabel(10f, 220f, SlugpupsEverywhereTranslator.GetGourmandText(), false),
+                new OpCheckBox(AllowGourmandCampaignSlugpups, new Vector2(10f, 190f)),
+                new OpLabel(160f, 220f, SlugpupsEverywhereTranslator.GetSpearmasterText(), false),
+                new OpCheckBox(AllowSpearmasterCampaignSlugpups, new Vector2(160f, 190f)),
+                new OpLabel(310f, 220f, SlugpupsEverywhereTranslator.GetTheWatcherText(), false),
+                new OpCheckBox(AllowTheWatcherCampaignSlugpups, new Vector2(310f, 190f)),
+                new OpLabel(10f, 140f, SlugpupsEverywhereTranslator.GetCustomSpawnText(), true),
+                new OpCheckBox(IsCustomSlugpupSpawnChance, new Vector2(520f, 140f)),
+                new OpFloatSlider(SlugpupSpawnChance, new Vector2(20f, 90f), 545, 2, false),
+                new OpLabel(10f, 50f, SlugpupsEverywhereTranslator.GetExpeditionText(), false),
+                new OpCheckBox(AllowPupsInExpedition, new Vector2(10f, 20f))
             ];
-            opTab.AddItems(this.UIArrPlayerOptions);
+            opTab.AddItems(UIArrPlayerOptions);
+
+            UIArrCapabilitiesOptions =
+            [
+                new OpLabel(10f, 570f, SlugpupsEverywhereTranslator.GetCapabilitiesText(), true),
+                new OpLabel(10f, 540f, SlugpupsEverywhereTranslator.GetCapText() , false),
+                new OpSlider(CappedSpawnAmount, new Vector2(20f, 490f), 1.1f, false),
+            ];
+            capTab.AddItems(UIArrCapabilitiesOptions);
+
         }
 
         public override void Update()
         {
-            bool flag = this.UIArrPlayerOptions == null;
+            bool flag = UIArrPlayerOptions == null;
             if (!flag)
             {
-                bool valueBool = ValueExt.GetValueBool((OpCheckBox)UIArrPlayerOptions[24]);
+                bool valueBool = ValueExt.GetValueBool((OpCheckBox)UIArrPlayerOptions[26]);
                 if (valueBool)
                 {
-                    ((OpFloatSlider)this.UIArrPlayerOptions[25]).Show();
+                    ((OpFloatSlider)UIArrPlayerOptions[27]).Show();
                 }
                 else
                 {
-                    ((OpFloatSlider)this.UIArrPlayerOptions[25]).Hide();
+                    ((OpFloatSlider)UIArrPlayerOptions[27]).Hide();
                 }
             }
         }

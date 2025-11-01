@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BepInEx;
 using MoreSlugcats;
 using RWCustom;
+using Watcher;
 using Random = UnityEngine.Random;
 
 namespace SlugpupsEverywhere
@@ -14,7 +15,6 @@ namespace SlugpupsEverywhere
     public const string Version = "1.0.4";
     public const string Name = "Pups Everywhere";
     private readonly SlugpupsEverywhereOptions Options;
-    public InGameTranslator InGameTranslator;
     private readonly CustomLogger CustomLogger;
     private bool IsInit;
     public SlugpupsEverywhere()
@@ -43,7 +43,6 @@ namespace SlugpupsEverywhere
       {
         try
         {
-          InGameTranslator = new InGameTranslator(self);
           MachineConnector.SetRegisteredOI(GUID, Options);
           IsInit = true;
         }
@@ -89,6 +88,9 @@ namespace SlugpupsEverywhere
         {
           int num3 = CalculatePupNumber(self.game.GetStorySession.saveState);
           CustomLogger.LogInfo(string.Format("Allowed number of pups to spawn this cycle: {0}", num3 - num));
+
+
+
           bool flag4 = num < num3;
           if (flag4)
           {
@@ -129,6 +131,12 @@ namespace SlugpupsEverywhere
                 abstractRoom2 = list[Random.Range(0, list.Count)];
               }
             }
+
+            if (num4 > Options.CappedSpawnAmount.Value)
+            {
+              num4 = Options.CappedSpawnAmount.Value;
+            }
+
             for (int j = 0; j < num4; j++)
             {
               bool flag9 = j > 2 && list.Count > 1;
@@ -183,7 +191,7 @@ namespace SlugpupsEverywhere
       }
       else
       {
-        bool flag2 = (saveState.saveStateNumber == SlugcatStats.Name.White && !Options.AllowWhiteCampaignSlugpups.Value) || (saveState.saveStateNumber == SlugcatStats.Name.Yellow && !Options.AllowYellowCampaignSlugpups.Value) || (saveState.saveStateNumber == SlugcatStats.Name.Red && !Options.AllowRedCampaignSlugpups.Value) || (saveState.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Gourmand && !Options.AllowGourmandCampaignSlugpups.Value) || (saveState.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Artificer && !Options.AllowArtificerCampaignSlugpups.Value) || (saveState.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Rivulet && !Options.AllowRivuletCampaignSlugpups.Value) || (saveState.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Spear && !Options.AllowSpearmasterCampaignSlugpups.Value) || (saveState.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Saint && !Options.AllowSaintCampaignSlugpups.Value);
+        bool flag2 = (saveState.saveStateNumber == SlugcatStats.Name.White && !Options.AllowWhiteCampaignSlugpups.Value) || (saveState.saveStateNumber == SlugcatStats.Name.Yellow && !Options.AllowYellowCampaignSlugpups.Value) || (saveState.saveStateNumber == SlugcatStats.Name.Red && !Options.AllowRedCampaignSlugpups.Value) || (saveState.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Gourmand && !Options.AllowGourmandCampaignSlugpups.Value) || (saveState.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Artificer && !Options.AllowArtificerCampaignSlugpups.Value) || (saveState.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Rivulet && !Options.AllowRivuletCampaignSlugpups.Value) || (saveState.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Spear && !Options.AllowSpearmasterCampaignSlugpups.Value) || (saveState.saveStateNumber == MoreSlugcatsEnums.SlugcatStatsName.Saint && !Options.AllowSaintCampaignSlugpups.Value) || (saveState.saveStateNumber == WatcherEnums.SlugcatStatsName.Watcher && !Options.AllowTheWatcherCampaignSlugpups.Value);
         if (flag2)
         {
           result = 0;
